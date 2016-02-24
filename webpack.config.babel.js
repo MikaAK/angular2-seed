@@ -28,9 +28,8 @@ const TS_INGORES = [
   1005
 ]
 
-const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
-
 const {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_BUCKET} = process.env,
+      CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin,
       BUILD_PATH = createPath('build'),
       SASS_LOADER = `${IS_BUILD ? 'postcss!' : ''}sass?sourceMap`
 
