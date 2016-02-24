@@ -76,9 +76,10 @@ var loaders = {
     include: [createPath('src/style')]
   },
 
+  // For to-string removes the ability to cache css so we use raw in development
   componentCss: {
     test: /\.s?css/,
-    loader: `raw!${sassLoader}`,
+    loader: `${IS_BUILD ? 'to-string' : 'raw'}!${sassLoader}`,
     include: [createPath('src/components'), createPath('src/directives')]
   },
 
