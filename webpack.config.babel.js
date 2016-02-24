@@ -20,14 +20,15 @@ var devtool,
 var vendor = [
   'json3',
   'es5-shim',
+  'es6-shim',
   'reflect-metadata',
+  'babel-polyfill',
   'angular2/bundles/angular2-polyfills',
   'angular2/platform/browser',
   'angular2/platform/common_dom',
   'angular2/core',
   'angular2/router',
-  'angular2/http',
-  'rxjs'
+  'angular2/http'
 ]
 
 var tsIngores = [
