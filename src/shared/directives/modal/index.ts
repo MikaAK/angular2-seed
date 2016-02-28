@@ -10,8 +10,8 @@ export class ModalConfig {
 
 @Component({
   selector: 'modal',
-  template: require('./modal.jade')(),
-  styles: [require('./modal.scss')]
+  template: require('./Modal.jade')(),
+  styles: [require('./Modal.scss')]
 })
 export class Modal {
   @Input() public config: ModalConfig

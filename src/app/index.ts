@@ -1,7 +1,7 @@
 import {Component} from 'angular2/core'
 import {RouteConfig, RouterOutlet} from 'angular2/router'
 
-import {HomeComponent} from './home'
+import {HomeComponent} from './Home'
 import {load} from 'webfontloader'
 
 @Component({

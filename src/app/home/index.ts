@@ -2,7 +2,7 @@ import {Component} from 'angular2/core'
 
 @Component({
   selector: 'home',
-  template: require('./home.jade')()
+  template: require('./Home.jade')()
 })
 export class HomeComponent {
   public greeting: string
