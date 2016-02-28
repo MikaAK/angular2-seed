@@ -1,4 +1,5 @@
 import {Component} from 'angular2/core'
+import {PostApi} from 'api/post'
 
 @Component({
   selector: 'home',
@@ -7,7 +8,12 @@ import {Component} from 'angular2/core'
 export class HomeComponent {
   public greeting: string,
 
-  constructor() {
+  constructor(_postApi: PostApi) {
+    _postApi.findAll()
+      .subscribe(posts => {
+        debugger
+      })
+
     this.greeting = 'webpack-ng2-seed'
   }
 }

@@ -42,10 +42,19 @@ const ENV = {
 
 const IS_BUILD = ENV.__STAGING__ || ENV.__PROD__
 
+var preLoaders = {
+  tslint: {
+    test: /\.ts/,
+    loader: 'tslint',
+    exclude: [createPath('node_modules')],
+    include: [createPath('src')]
+  }
+}
+
 var loaders = {
   javascript: {
     test: /\.ts/,
-    loader: `babel!ts?${TS_INGORES.map(num => `ignoreDiagnostics[]=${num}`).join('&')}!tslint`,
+    loader: `babel!ts?${TS_INGORES.map(num => `ignoreDiagnostics[]=${num}`).join('&')}`,
     exclude: [createPath('node_modules')],
     include: [createPath('src')]
   },
@@ -66,7 +75,7 @@ var loaders = {
   componentCss: {
     test: /\.s?css/,
     loader: `${IS_BUILD ? 'to-string' : 'raw'}!${SASS_LOADER}`,
-    include: [createPath('src/components'), createPath('src/directives')]
+    exclude: [createPath('src/style')]
   },
 
   json: {
@@ -121,6 +130,7 @@ var config = {
 
   module: {
     noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/],
+    preLoaders: Object.values(preLoaders),
     loaders: Object.values(loaders)
   },
 
