@@ -28,7 +28,7 @@ const TS_INGORES = [
   1005
 ]
 
-const {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_BUCKET} = process.env,
+const {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_BUCKET} = process.env,
       CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin,
       BUILD_PATH = createPath('build'),
       SASS_LOADER = `${IS_BUILD ? 'postcss!' : ''}sass?sourceMap`
@@ -236,7 +236,7 @@ else
       exclude: /.*\.html$/,
       s3Options: {
         accessKeyId: AWS_ACCESS_KEY,
-        secretAccessKey: AWS_SECRET_ACCESS_KEY
+        secretAccessKey: AWS_SECRET_KEY
       },
       s3UploadOptions: {
         Bucket: AWS_BUCKET,
@@ -247,10 +247,11 @@ else
       }
     }),
     new S3Plugin({
-      directory: path.resolve(PUBLIC_PATH, 'img'),
+      directory: PUBLIC_PATH,
+      basePath: 'public/',
       s3Options: {
         accessKeyId: AWS_ACCESS_KEY,
-        secretAccessKey: AWS_SECRET_ACCESS_KEY
+        secretAccessKey: AWS_SECRET_KEY
       },
       s3UploadOptions: {
         Bucket: AWS_BUCKET,
