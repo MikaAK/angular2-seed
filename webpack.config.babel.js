@@ -9,6 +9,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import IndexBuilder from './webpack-plugins/IndexBuilder'
 import S3Plugin from 'webpack-s3-plugin'
 import {vendor} from './vendors.json'
+import {name} from './package.json'
 
 const CONTEXT = path.resolve(__dirname),
       DEV_SERVER_PORT = 4000,
@@ -37,9 +38,11 @@ const ENV = {
   __STAGING__: NODE_ENV === 'staging'
 }
 
-const IS_BUILD = ENV.__STAGING__ || ENV.__PROD__
+const IS_BUILD = ENV.__STAGING__ || ENV.__PROD__,
       DEFAULT_CDN = CDN_URL || `https://s3-us-west-2.amazonaws.com/${AWS_BUCKET}`,
       SASS_LOADER = `${IS_BUILD ? 'postcss!' : ''}sass?sourceMap`
+
+Object.assign(ENV, {__IS_BUILD__: IS_BUILD})
 
 var preLoaders = {
   tslint: {
@@ -192,7 +195,7 @@ if (ENV.__DEV__) {
   var WebpackNotifierPlugin = require('webpack-notifier')
 
   config.plugins.push(new WebpackNotifierPlugin({
-    title: 'Angular2 App',
+    title: name,
     contentImage: createPath('./favicon.ico')
   }))
 } else if (IS_BUILD) {

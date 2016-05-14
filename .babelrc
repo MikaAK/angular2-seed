@@ -1,5 +1,15 @@
 {
-  "presets": ["es2015", "stage-2"],
-  "plugins": ["external-helpers-2", "transform-strict-mode", "transform-function-bind", "transform-runtime"]
+  "presets": [
+    "es2015",
+    "stage-2"
+  ],
+
+  "plugins": [
+    "lodash",
+    "external-helpers-2",
+    "transform-strict-mode",
+    "transform-function-bind",
+    "transform-runtime"
+  ]
 }
 

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, HostBinding, Injectable} from 'angular2/core'
+import {Component, Input, Output, EventEmitter, HostBinding, Injectable} from '@angular/core'
 
 @Injectable()
 export class ModalService {

@@ -1,33 +1,17 @@
-import {Component} from 'angular2/core'
-import {RouteConfig, RouterOutlet} from 'angular2/router'
+import {Component} from '@angular/core'
+import {Routes, ROUTER_DIRECTIVES} from '@angular/router'
 
 import {HomeComponent} from './Home'
-import {load} from 'webfontloader'
 
 @Component({
   selector: 'app',
   template: require('./app.jade')(),
   styles: [require('./app.scss')],
-  directives: [RouterOutlet]
+  directives: [ROUTER_DIRECTIVES]
 })
-@RouteConfig([
-  { path: '/', component: HomeComponent, name: 'Index' },
-  { path: '/**', redirectTo: ['Index'] }
-])
+@Routes([{
+  path: '/',
+  component: HomeComponent
+}])
 export class AppComponent {
-  public ngOnInit() {
-    return new Promise(function(resolve, reject) {
-      load({
-        google: {
-          families: ['Lato', 'Droid Serif']
-        },
-        active() {
-          resolve()
-        },
-        inactive() {
-          reject()
-        }
-      })
-    })
-  }
 }

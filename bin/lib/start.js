@@ -1,7 +1,7 @@
 import path from 'path'
 import {spawnSync} from 'child_process'
+import context from './get_root_path'
 
-var context = path.resolve(__dirname, '../../..')
 
 const WEBPACK_DEV_SERVER = path.resolve(context, 'node_modules/.bin/webpack-dev-server'),
       CONFIG_PATH = path.resolve(context, 'webpack.config.babel.js'),

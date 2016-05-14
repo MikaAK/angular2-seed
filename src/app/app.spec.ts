@@ -1,4 +1,4 @@
-import {it} from 'angular2/testing'
+import {it} from '@angular/core/testing'
 
 describe('AppComponent', function() {
   it('should be true', function() {
