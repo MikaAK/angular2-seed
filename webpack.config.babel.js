@@ -228,7 +228,7 @@ if (ENV.__DEV__) {
     new ExtractTextPlugin('[name]-[chunkhash].css'),
     new LimitChunkCountPlugin({maxChunks: 15}),
     new MinChunkSizePlugin({minChunkSize: 10000}),
-    new UglifyJsPlugin()
+    new UglifyJsPlugin({mangle: false})
   )
 } else if (ENV.__TEST__) {
   config.resolve.cache = false
@@ -256,7 +256,7 @@ if (ENV.__DEV__) {
 if (ENV.__PROD__)
   config.plugins.push(
     new CompressionPlugin({
-      asset: '{file}',
+      asset: '[path]',
       algorithm: 'gzip',
       minRatio: 0.8
     }),
