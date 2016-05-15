@@ -157,10 +157,11 @@ var config = {
     new DefinePlugin(ENV),
     new ProgressPlugin(percentage => progressBar.update(percentage)),
     new HtmlWebpackPlugin({
+      inject: false,
       title: name,
       minify: IS_BUILD ? {caseSensitive: true} : false,
       template: createAppPath('index.jade'),
-      favicon: path.resolve(__dirname, 'favicon.ico')
+      favicon: path.resolve(__dirname, 'favicon.ico'),
     })
   ],
 
@@ -200,6 +201,7 @@ if (!ENV.__TEST__)
   config.plugins.push(
     new CommonsChunkPlugin({
       name: 'vendor',
+      async: true,
       filename: IS_BUILD ? 'vendor-[chunkhash].js' : 'vendor.js',
       minChunks: Infinity
     }),
