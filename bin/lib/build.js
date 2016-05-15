@@ -7,7 +7,6 @@ const WEBPACK = path.resolve(CONTEXT, 'node_modules/.bin/webpack'),
 
 export default function() {
   return spawnSync(WEBPACK, [
-    '--colors',
-    '--progress'
+    '--colors'
   ], {stdio})
 }

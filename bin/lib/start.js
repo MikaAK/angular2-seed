@@ -11,7 +11,7 @@ export default function() {
   return spawnSync(WEBPACK_DEV_SERVER, [
     '--config', CONFIG_PATH,
     '--colors', '--inline',
-    '--hot', '--progress',
+    '--hot',
     '--history-api-fallback'
   ], {stdio, cwd: context, env: process.env})
 }

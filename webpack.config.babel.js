@@ -6,16 +6,36 @@ import webpack from 'webpack'
 import autoprefixer from 'autoprefixer'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import IndexBuilder from './webpack-plugins/IndexBuilder'
+import ProgressBar from 'progress'
 import S3Plugin from 'webpack-s3-plugin'
+import CompressionPlugin from 'compression-webpack-plugin' 
 import {vendor} from './vendors.json'
 import {name} from './package.json'
 
-const CONTEXT = path.resolve(__dirname),
+const {
+  CommonsChunkPlugin,
+  DedupePlugin,
+  OccurenceOrderPlugin,
+  LimitChunkCountPlugin,
+  MinChunkSizePlugin,
+  UglifyJsPlugin
+} = webpack.optimize
+
+const {DefinePlugin, ProgressPlugin} = webpack,
+      CONTEXT = path.resolve(__dirname),
+      createPath = (nPath) => path.resolve(CONTEXT, nPath),
       DEV_SERVER_PORT = 4000,
-      APP_ROOT = path.resolve(CONTEXT, 'src'),
-      PUBLIC_PATH = path.resolve(CONTEXT, 'public'),
-      createPath = (nPath) => path.resolve(CONTEXT, nPath)
+      APP_ROOT = createPath('src'),
+      PUBLIC_PATH = createPath('public'),
+      createAppPath = (nPath) => path.resolve(APP_ROOT, nPath),
+      {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, AWS_BUCKET, CDN_URL} = process.env,
+      BUILD_PATH = createPath('build')
+
+const progressBar = new ProgressBar(':bar [:current/:total](:percent) - :elapsed', {
+  complete: '=',
+  incomplete: ' ',
+  total: 100
+})
 
 var devtool
 
@@ -26,10 +46,6 @@ const TS_INGORES = [
   2375,
   1005
 ]
-
-const {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_BUCKET, CDN_URL} = process.env,
-      CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin,
-      BUILD_PATH = createPath('build')
 
 const ENV = {
   __DEV__: NODE_ENV === 'development',
@@ -49,7 +65,7 @@ var preLoaders = {
     test: /\.ts/,
     loader: 'tslint',
     exclude: [createPath('node_modules')],
-    include: [createPath('src')]
+    include: [APP_ROOT]
   }
 }
 
@@ -58,26 +74,26 @@ var loaders = {
     test: /\.ts/,
     loader: `babel!ts?${TS_INGORES.map(num => `ignoreDiagnostics[]=${num}`).join('&')}`,
     exclude: [createPath('node_modules')],
-    include: [createPath('src')]
+    include: [APP_ROOT]
   },
 
   html: {
     test: /\.jade/,
     loader: 'jade',
-    include: [createPath('src')]
+    include: [APP_ROOT]
   },
 
   globalCss: {
     test: /\.s?css/,
     loader: `style!css?sourceMap!${SASS_LOADER}`,
-    include: [createPath('src/style')]
+    include: [createAppPath('style')]
   },
 
   // For to-string removes the ability to cache css so we use raw in development
   componentCss: {
     test: /\.s?css/,
     loader: `${IS_BUILD ? 'to-string' : 'raw'}!${SASS_LOADER}`,
-    exclude: [createPath('src/style')]
+    exclude: [createAppPath('style')]
   },
 
   json: {
@@ -101,9 +117,9 @@ var loaders = {
 if (ENV.__PROD__)
   devtool = false
 else if (ENV.__DEV__)
-  devtool = 'source-map'
+  devtool = '#source-map'
 else if (ENV.__STAGING__ || ENV.__TEST__)
-  devtool = 'inline-source-map'
+  devtool = '#inline-source-map'
 
 var config = {
   context: CONTEXT,
@@ -118,9 +134,9 @@ var config = {
   output: {
     path: BUILD_PATH,
     publicPath: IS_BUILD ? DEFAULT_CDN : '',
-    filename: IS_BUILD ? '[name]-[hash].js' : '[name].js',
+    filename: IS_BUILD ? '[name]-[chunkhash].js' : '[name].js',
     sourceMapFilename: '[name].map',
-    chunkFilename: '[id].chunk.js'
+    chunkFilename: IS_BUILD ? '[id].chunk-[chunkhash].js': '[id].chunk.js'
   },
 
   resolve: {
@@ -138,9 +154,12 @@ var config = {
   },
 
   plugins: [
-    new webpack.DefinePlugin(ENV),
+    new DefinePlugin(ENV),
+    new ProgressPlugin(percentage => progressBar.update(percentage)),
     new HtmlWebpackPlugin({
-      templateContent: IndexBuilder(APP_ROOT),
+      title: name,
+      minify: IS_BUILD ? {caseSensitive: true} : false,
+      template: createAppPath('index.jade'),
       favicon: path.resolve(__dirname, 'favicon.ico')
     })
   ],
@@ -155,6 +174,7 @@ var config = {
   },
 
   devServer: {
+    stats: 'minimal',
     port: DEV_SERVER_PORT,
     // Sample Proxy Config
     //proxy: [{
@@ -183,9 +203,10 @@ if (!ENV.__TEST__)
       filename: IS_BUILD ? 'vendor-[chunkhash].js' : 'vendor.js',
       minChunks: Infinity
     }),
+
     new CommonsChunkPlugin({
       name: 'common',
-      filename: IS_BUILD ? 'common-[hash].js' : 'common.js',
+      filename: IS_BUILD ? 'common-[chunkhash].js' : 'common.js',
       minChunks: 2,
       chunks: ['app', 'vendor']
     })
@@ -202,11 +223,12 @@ if (ENV.__DEV__) {
   loaders.globalCss.loader = ExtractTextPlugin.extract('style', loaders.globalCss.loader.replace('style', ''))
 
   config.plugins.push(
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new OccurenceOrderPlugin(),
+    new DedupePlugin(),
     new ExtractTextPlugin('[name]-[chunkhash].css'),
-    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15}),
-    new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000}),
-    new webpack.optimize.UglifyJsPlugin()
+    new LimitChunkCountPlugin({maxChunks: 15}),
+    new MinChunkSizePlugin({minChunkSize: 10000}),
+    new UglifyJsPlugin()
   )
 } else if (ENV.__TEST__) {
   config.resolve.cache = false
@@ -231,32 +253,41 @@ if (ENV.__DEV__) {
   ]
 }
 
-if (!ENV.__PROD__)
-  vendor.push('zone.js/dist/long-stack-trace-zone')
-else
+if (ENV.__PROD__)
   config.plugins.push(
+    new CompressionPlugin({
+      asset: '{file}',
+      algorithm: 'gzip',
+      minRatio: 0.8
+    }),
+
     new S3Plugin({
       exclude: /.*\.html$/,
       s3Options: {
         accessKeyId: AWS_ACCESS_KEY,
-        secretAccessKey: AWS_SECRET_KEY
+        secretAccessKey: AWS_SECRET_KEY,
+        region: AWS_REGION
       },
       s3UploadOptions: {
         Bucket: AWS_BUCKET,
-        CacheControl: 'max-age=315360000, no-transform, public'
+        CacheControl: 'max-age=315360000, no-transform, public',
+        ContentEncoding: 'gzip'
       },
       cdnizerOptions: {
         defaultCDNBase: DEFAULT_CDN
       }
     }),
+
     new S3Plugin({
       directory: BUILD_PATH,
       basePath: 'public/',
       exclude: /\.svg$/,
-      include: loader.file.test,
+      include: loaders.file.test,
       s3Options: {
         accessKeyId: AWS_ACCESS_KEY,
-        secretAccessKey: AWS_SECRET_KEY
+        secretAccessKey: AWS_SECRET_KEY,
+        region: AWS_REGION
+
       },
       s3UploadOptions: {
         Bucket: AWS_BUCKET,
@@ -264,5 +295,7 @@ else
       }
     })
   )
+else
+  vendor.push('zone.js/dist/long-stack-trace-zone')
 
 module.exports = config
