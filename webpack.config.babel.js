@@ -204,7 +204,7 @@ if (!ENV.__TEST__)
       async: true,
       filename: IS_BUILD ? 'vendor-[chunkhash].js' : 'vendor.js',
       minChunks: Infinity
-    }),
+    })
   )
 
 if (ENV.__DEV__) {
