@@ -4,11 +4,11 @@ import _ from 'lodash'
 import path from 'path'
 import webpack from 'webpack'
 import autoprefixer from 'autoprefixer'
+import ProgressBar from 'progress'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import ProgressBar from 'progress'
 import S3Plugin from 'webpack-s3-plugin'
-import CompressionPlugin from 'compression-webpack-plugin' 
+import CompressionPlugin from 'compression-webpack-plugin'
 import {vendor} from './vendors.json'
 import {name} from './package.json'
 
@@ -140,6 +140,7 @@ var config = {
   },
 
   resolve: {
+    cache: ENV.__TEST__,
     extensions: ['', '.ts', '.js', '.json'],
     root: [APP_ROOT, PUBLIC_PATH],
     alias: {
@@ -159,6 +160,7 @@ var config = {
     new HtmlWebpackPlugin({
       inject: false,
       title: name,
+      chunksSortMode: 'dependency',
       minify: IS_BUILD ? {caseSensitive: true} : false,
       template: createAppPath('index.jade'),
       favicon: path.resolve(__dirname, 'favicon.ico'),
@@ -201,7 +203,6 @@ if (!ENV.__TEST__)
   config.plugins.push(
     new CommonsChunkPlugin({
       name: 'vendor',
-      async: true,
       filename: IS_BUILD ? 'vendor-[chunkhash].js' : 'vendor.js',
       minChunks: Infinity
     })
@@ -223,16 +224,17 @@ if (ENV.__DEV__) {
     new ExtractTextPlugin('[name]-[chunkhash].css'),
     new LimitChunkCountPlugin({maxChunks: 15}),
     new MinChunkSizePlugin({minChunkSize: 10000}),
-    new UglifyJsPlugin({mangle: false}),
-    new CommonsChunkPlugin({
-      name: 'common',
-      filename: IS_BUILD ? 'common-[chunkhash].js' : 'common.js',
-      minChunks: 2,
-      chunks: ['app', 'vendor']
-    })
+    new UglifyJsPlugin({mangle: false})
+    // If you need more entry chunks add entrypoint names to `chunks`
+    // new CommonsChunkPlugin({
+    //   name: 'common',
+    //   filename: IS_BUILD ? 'common-[chunkhash].js' : 'common.js',
+    //   async: true,
+    //   minChunks: 2,
+    //   chunks: ['app']
+    // })
   )
 } else if (ENV.__TEST__) {
-  config.resolve.cache = false
   config.stats = {
     colors: true,
     reasons: true
@@ -299,4 +301,4 @@ if (ENV.__PROD__)
 else
   vendor.push('zone.js/dist/long-stack-trace-zone')
 
-module.exports = config
+export default config

@@ -17,6 +17,6 @@ html
       - var currentFile = htmlWebpackPlugin.files.js[i]
 
       - if (/common/.test(currentFile))
-        script(src='#{currentFile}')
-      - else
         script(src='#{currentFile}' async)
+      - else
+        script(src='#{currentFile}')
