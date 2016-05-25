@@ -31,8 +31,8 @@ const {DefinePlugin, ProgressPlugin} = webpack,
       {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, AWS_BUCKET, CDN_URL} = process.env,
       BUILD_PATH = createPath('build')
 
-const progressBar = new ProgressBar(':bar [:current/:total](:percent) - :elapsed', {
-  complete: '=',
+const progressBar = new ProgressBar('[:bar] :percent (:current/:total)', {
+  complete: '-',
   incomplete: ' ',
   total: 100
 })
@@ -205,13 +205,6 @@ if (!ENV.__TEST__)
       filename: IS_BUILD ? 'vendor-[chunkhash].js' : 'vendor.js',
       minChunks: Infinity
     }),
-
-    new CommonsChunkPlugin({
-      name: 'common',
-      filename: IS_BUILD ? 'common-[chunkhash].js' : 'common.js',
-      minChunks: 2,
-      chunks: ['app', 'vendor']
-    })
   )
 
 if (ENV.__DEV__) {
@@ -230,7 +223,13 @@ if (ENV.__DEV__) {
     new ExtractTextPlugin('[name]-[chunkhash].css'),
     new LimitChunkCountPlugin({maxChunks: 15}),
     new MinChunkSizePlugin({minChunkSize: 10000}),
-    new UglifyJsPlugin({mangle: false})
+    new UglifyJsPlugin({mangle: false}),
+    new CommonsChunkPlugin({
+      name: 'common',
+      filename: IS_BUILD ? 'common-[chunkhash].js' : 'common.js',
+      minChunks: 2,
+      chunks: ['app', 'vendor']
+    })
   )
 } else if (ENV.__TEST__) {
   config.resolve.cache = false
