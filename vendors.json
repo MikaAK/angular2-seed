@@ -11,8 +11,8 @@
     "@angular/core",
     "@angular/common",
     "@angular/http",
-    "@ngrx/core",
-    "@ngrx/router",
+    "@angular/router",
+    "@angular/forms",
     "rxjs/add/operator/map"
   ]
 }
