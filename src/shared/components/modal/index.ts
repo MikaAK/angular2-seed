@@ -22,14 +22,14 @@ export class ModalService {
 
 @Component({
   selector: 'modal',
-  template: require('./Modal.jade')(),
-  styles: [require('./Modal.scss')]
+  template: require('./modal.jade')(),
+  styles: [require('./modal.scss')]
 })
 export class Modal {
   @Input() public title: string
-  @Output() public onClose: EventEmitter<boolean> = new EventEmitter()
-  @Output() public onOpen: EventEmitter<boolean> = new EventEmitter()
-  public _isOpenLast: boolean = false
+  @Output() public onClose = new EventEmitter()
+  @Output() public onOpen = new EventEmitter()
+  public _isOpenLast = false
 
   constructor(public modalService: ModalService) {}
 

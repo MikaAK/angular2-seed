@@ -2,8 +2,8 @@ import {Component, Output, Input, EventEmitter} from '@angular/core'
 
 @Component({
   selector: 'form-save',
-  template: require('./FormSave.jade')(),
-  styles: [require('./FormSave.scss')]
+  template: require('./formSave.jade')(),
+  styles: [require('./formSave.scss')]
 })
 export class FormSave {
   @Input() public saveText: string = 'Save'

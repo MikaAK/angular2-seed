@@ -39,6 +39,20 @@ const progressBar = new ProgressBar('[:bar] :percent (:current/:total)', {
 
 var devtool
 
+const HTML_PLUGIN_CONFIG = {
+  inject: false,
+  title: name,
+  chunksSortMode: 'dependency',
+  minify: IS_BUILD ? {caseSensitive: true} : false,
+  template: createAppPath('index.jade'),
+  favicon: path.resolve(__dirname, 'favicon.ico'),
+}
+
+const ENTRY = {
+  vendor,
+  app: './src/boot.ts'
+}
+
 const TS_INGORES = [
   2403,
   2300,
@@ -51,7 +65,8 @@ const ENV = {
   __DEV__: NODE_ENV === 'development',
   __PROD__: NODE_ENV === 'production',
   __TEST__: NODE_ENV === 'test',
-  __STAGING__: NODE_ENV === 'staging'
+  __STAGING__: NODE_ENV === 'staging',
+  __IS_WEBWORKER__: false
 }
 
 const IS_BUILD = ENV.__STAGING__ || ENV.__PROD__,
@@ -59,6 +74,13 @@ const IS_BUILD = ENV.__STAGING__ || ENV.__PROD__,
       SASS_LOADER = `${IS_BUILD ? 'postcss!' : ''}sass?sourceMap`
 
 Object.assign(ENV, {__IS_BUILD__: IS_BUILD})
+
+if (ENV.__IS_WEBWORKER__) {
+  Object.assign(ENTRY, {webworker: './src/boot.webworker.ts'})
+  Object.assign(HTML_PLUGIN_CONFIG, {
+    excludeChunks: ['app']
+  })
+}
 
 var preLoaders = {
   tslint: {
@@ -125,11 +147,7 @@ var config = {
   context: CONTEXT,
   devtool,
   debug: !ENV.__PROD__ && !ENV.__STAGING__,
-
-  entry: {
-    vendor,
-    app: './src/boot.ts'
-  },
+  entry: ENTRY,
 
   output: {
     path: BUILD_PATH,
@@ -157,14 +175,7 @@ var config = {
   plugins: [
     new DefinePlugin(ENV),
     new ProgressPlugin(percentage => progressBar.update(percentage)),
-    new HtmlWebpackPlugin({
-      inject: false,
-      title: name,
-      chunksSortMode: 'dependency',
-      minify: IS_BUILD ? {caseSensitive: true} : false,
-      template: createAppPath('index.jade'),
-      favicon: path.resolve(__dirname, 'favicon.ico'),
-    })
+    new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG)
   ],
 
   tslint: {
@@ -185,13 +196,14 @@ var config = {
       //target: 'http://localhost:4000'
     //}],
 
-    historyApiFallback: {
-      // If you have multiple entrypoints add them here
-      rewrites: [{
-        from: /.*/,
-        to: '/index.html'
-      }]
-    },
+    historyApiFallback: true,
+    // {
+    //   // If you have multiple entrypoints add them here
+    //   rewrites: [{
+    //     from: /.*/,
+    //     to: '/index.html'
+    //   }]
+    // },
 
     watchOptions: {
       aggregateTimeout: 300
@@ -203,6 +215,7 @@ if (!ENV.__TEST__)
   config.plugins.push(
     new CommonsChunkPlugin({
       name: 'vendor',
+      chunks: Object.keys(ENTRY).filter(key => ENV.__IS_WEBWORKER__ ? key !== 'app' : true),
       filename: IS_BUILD ? 'vendor-[chunkhash].js' : 'vendor.js',
       minChunks: Infinity
     })
