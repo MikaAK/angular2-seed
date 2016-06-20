@@ -4,6 +4,7 @@ $light-black : #303030;
 
 // Grey
 $light-grey  : #E7E7E7;
+$lighter-grey: lighten($light-grey, 10);
 $lightest-grey: #F7F7F7;
 $grey        : #DBDBDB;
 $dark-grey   : darken($grey, 10);

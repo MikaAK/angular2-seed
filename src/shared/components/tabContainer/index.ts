@@ -35,8 +35,13 @@ export class TabContainer implements AfterContentInit {
   }
 
   public selectTab(tab) {
+    tab.active = true
+
     this.tabs
-      .forEach((tabItem: Tab) => tabItem.active = tabItem === tab)
+      .forEach((tabItem: Tab) => {
+        if (tabItem !== tab && tabItem.active)
+          tabItem.active = false
+      })
 
     this.onSelect.emit(tab)
   }
