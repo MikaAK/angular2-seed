@@ -1,5 +1,21 @@
 h1 Welcome to {{greeting}}
 
+button.btn--default('(click)'='modalService.open()')
+  | Open Modal
+
+tab-container
+  tab(title='Hello World')
+    span Tab 1
+
+  tab(title='Hello World #2')
+    span Tab 2
+
+  tab(title='Hello World #3')
+    span Tab 3
+
+modal(title='Hello Modal')
+  h1 This Is A modal
+
 .svg--small
   != require('svg/up.svg')
 

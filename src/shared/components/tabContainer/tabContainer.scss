@@ -1,0 +1,20 @@
+@import '~style/utility';
+
+:host {
+  display: inline-block;
+  border: 1px solid $black;
+}
+
+.tab-container_tabs {
+  border-bottom: 1px solid $black;
+}
+
+.tab-container_tab_title {
+  border-left: 1px solid $black;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.tab-container_tab_title:first-of-type {
+  border-left: 0;
+}

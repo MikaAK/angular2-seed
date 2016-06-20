@@ -1,0 +1,29 @@
+%flex-container {
+  display: flex;
+}
+
+.flex-container {
+  @extend %flex-container;
+}
+
+.flex-container--column {
+  @extend %flex-container;
+  flex-direction: column;
+}
+
+.flex-container--sb {
+  @extend %flex-container;
+  justify-content: space-between;
+}
+
+.flex-container--sa {
+  @extend %flex-container;
+  justify-content: space-around;
+}
+
+.flex-container--centered {
+  @extend %flex-container;
+  justify-content: center;
+  align-items: center;
+}
+

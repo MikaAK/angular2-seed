@@ -13,6 +13,7 @@
     "@angular/http",
     "@angular/router",
     "@angular/forms",
-    "rxjs/add/operator/map"
+    "rxjs/add/operator/map",
+    "rxjs/add/operator/filter"
   ]
 }

@@ -1,0 +1,11 @@
+ul.flex-container.tab-container_tabs
+  li.tab-container_tab_title(
+    '*ngFor'='let tab of tabs'
+    '(click)'='selectTab(tab)'
+    '[class.disabled]'='tab.disabled'
+    '[class.active]'='tab.active'
+  )
+    span {{ tab.title }}
+
+div
+  ng-content
