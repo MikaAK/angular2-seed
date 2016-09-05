@@ -115,7 +115,7 @@ var loaders = {
   },
 
   html: {
-    test: /\.jade$/,
+    test: /\.pug/,
     loader: 'pug',
     include: [APP_ROOT]
   },
@@ -189,9 +189,7 @@ var config = {
 
   plugins: [
     new DefinePlugin(ENV),
-    new ProgressPlugin(percentage => progressBar.update(percentage)),
-    new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG),
-    new WebpackDashboard()
+    new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG)
   ],
 
   tslint: {
@@ -237,13 +235,19 @@ if (!ENV.__TEST__)
     })
   )
 
+if (ENV.__TEST__ || IS_BUILD)
+  config.plugins.push(new ProgressPlugin(percentage => progressBar.update(percentage)))
+
 if (ENV.__DEV__) {
   var WebpackNotifierPlugin = require('webpack-notifier')
 
-  config.plugins.push(new WebpackNotifierPlugin({
-    title: name,
-    contentImage: rootPath('./favicon.ico')
-  }))
+  config.plugins.push(
+    new WebpackDashboard({port: DEV_SERVER_PORT, title: name}),
+    new WebpackNotifierPlugin({
+      title: name,
+      contentImage: rootPath('./favicon.ico')
+    })
+  )
 } else if (IS_BUILD) {
   loaders.globalCss.loader = ExtractTextPlugin.extract({
     fallbackLoader: 'style',
