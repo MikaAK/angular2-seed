@@ -1,0 +1,13 @@
+@import '~style/utility';
+
+:host.active button {
+  background-color: $orange;
+  color: white;
+}
+
+button {
+  @include full-size;
+  background-color: $lightest-blue;
+  font-size: 16px;
+  padding: 5px 10px;
+}

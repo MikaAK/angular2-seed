@@ -16,5 +16,5 @@ const routeConfig = [{
   exports: [HomeComponent],
   declarations: [HomeComponent]
 })
-export class HomeModule {
+export default class HomeModule {
 }
