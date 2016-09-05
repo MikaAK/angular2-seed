@@ -23,13 +23,15 @@ const {
 
 const {DefinePlugin, ProgressPlugin} = webpack,
       CONTEXT = path.resolve(__dirname),
-      createPath = (nPath) => path.resolve(CONTEXT, nPath),
+      rootPath = (nPath) => path.resolve(CONTEXT, nPath),
       DEV_SERVER_PORT = 4000,
-      APP_ROOT = createPath('src'),
-      PUBLIC_PATH = createPath('public'),
-      createAppPath = (nPath) => path.resolve(APP_ROOT, nPath),
+      APP_ROOT = rootPath('src'),
+      PUBLIC_PATH = rootPath('public'),
+      NODE_MODULES_PATH = rootPath('node_modules'),
+      appPath = (nPath) => path.resolve(APP_ROOT, nPath),
       {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, AWS_BUCKET, CDN_URL} = process.env,
-      BUILD_PATH = createPath('build')
+      BUILD_PATH = rootPath('build'),
+      IS_WEBWORKER = false
 
 const progressBar = new ProgressBar('[:bar] :percent (:current/:total)', {
   complete: '-',
@@ -44,13 +46,14 @@ const HTML_PLUGIN_CONFIG = {
   title: name,
   chunksSortMode: 'dependency',
   minify: IS_BUILD ? {caseSensitive: true} : false,
-  template: createAppPath('index.jade'),
+  template: appPath('index.jade'),
   favicon: path.resolve(__dirname, 'favicon.ico'),
 }
 
 const ENTRY = {
   vendor,
-  app: './src/boot.ts'
+  app: './src/boot.ts',
+  styles: './src/style/global.scss'
 }
 
 const TS_INGORES = [
@@ -66,7 +69,7 @@ const ENV = {
   __PROD__: NODE_ENV === 'production',
   __TEST__: NODE_ENV === 'test',
   __STAGING__: NODE_ENV === 'staging',
-  __IS_WEBWORKER__: false
+  __IS_WEBWORKER__: IS_WEBWORKER
 }
 
 const IS_BUILD = ENV.__STAGING__ || ENV.__PROD__,
@@ -84,55 +87,66 @@ if (ENV.__IS_WEBWORKER__) {
 
 var preLoaders = {
   tslint: {
-    test: /\.ts/,
+    test: /\.ts$/,
     loader: 'tslint',
-    exclude: [createPath('node_modules')],
+    exclude: [NODE_MODULES_PATH],
     include: [APP_ROOT]
+  },
+
+  systemJS: {
+    test: /\.ts$/,
+    loader: 'string-replace',
+    query: {
+      search: '(System|SystemJS)(.*[\\n\\r]\\s*\\.|\\.)import\\((.+)\\)',
+      replace: '$1.import($3).then(mod => mod.__esModule ? mod.default : mod)',
+      flags: 'g'
+    },
+    include: [rootPath('src/app'), rootPath('src/shared')]
   }
 }
 
 var loaders = {
   javascript: {
-    test: /\.ts/,
-    loader: `babel!ts?${TS_INGORES.map(num => `ignoreDiagnostics[]=${num}`).join('&')}`,
-    exclude: [createPath('node_modules')],
+    test: /\.ts$/,
+    loader: `babel!awesome-typescript?${TS_INGORES.map(num => `ignoreDiagnostics[]=${num}`).join('&')}`,
+    exclude: [NODE_MODULES_PATH],
     include: [APP_ROOT]
   },
 
   html: {
-    test: /\.jade/,
-    loader: 'jade',
+    test: /\.jade$/,
+    loader: 'pug',
     include: [APP_ROOT]
   },
 
   globalCss: {
-    test: /\.s?css/,
+    test: /\.s?css$/,
     loader: `style!css?sourceMap!${SASS_LOADER}`,
-    include: [createAppPath('style')]
+    include: [appPath('style')]
   },
 
   // For to-string removes the ability to cache css so we use raw in development
   componentCss: {
-    test: /\.s?css/,
+    test: /\.s?css$/,
     loader: `${IS_BUILD ? 'to-string' : 'raw'}!${SASS_LOADER}`,
-    exclude: [createAppPath('style')]
+    exclude: [appPath('style')]
   },
 
   json: {
-    test: /\.json/,
+    test: /\.json$/,
     loader: 'json'
   },
 
   file: {
     test: /\.(png|gif|jpg|jpeg)$/,
     loader: `file${IS_BUILD ? '?name=[hash].[ext]' : ''}!image-webpack?bypassOnDebug`,
-    include: [createPath('public/img')]
+    include: [rootPath('public/img')]
   },
 
   svg: {
-    test: /\.svg/,
+    test: /\.svg$/,
     loader: 'image-webpack?bypassOnDebug!svg-inline',
-    include: [createPath('public/svg')]
+    include: [rootPath('public/svg')]
   }
 }
 
@@ -160,9 +174,9 @@ var config = {
   resolve: {
     cache: ENV.__TEST__,
     extensions: ['', '.ts', '.js', '.json'],
-    root: [APP_ROOT, PUBLIC_PATH],
+    modules: [NODE_MODULES_PATH, PUBLIC_PATH, APP_ROOT],
     alias: {
-      vendor: createPath('vendor')
+      vendor: rootPath('vendor')
     }
   },
 
@@ -226,13 +240,15 @@ if (ENV.__DEV__) {
 
   config.plugins.push(new WebpackNotifierPlugin({
     title: name,
-    contentImage: createPath('./favicon.ico')
+    contentImage: rootPath('./favicon.ico')
   }))
 } else if (IS_BUILD) {
-  loaders.globalCss.loader = ExtractTextPlugin.extract('style', loaders.globalCss.loader.replace('style', ''))
+  loaders.globalCss.loader = ExtractTextPlugin.extract({
+    fallbackLoader: 'style',
+    loader: loaders.globalCss.loader.replace('style', '')
+  })
 
   config.plugins.push(
-    new OccurenceOrderPlugin(),
     new DedupePlugin(),
     new ExtractTextPlugin('[name]-[chunkhash].css'),
     new LimitChunkCountPlugin({maxChunks: 15}),
@@ -303,7 +319,6 @@ if (ENV.__PROD__)
         accessKeyId: AWS_ACCESS_KEY,
         secretAccessKey: AWS_SECRET_KEY,
         region: AWS_REGION
-
       },
       s3UploadOptions: {
         Bucket: AWS_BUCKET,

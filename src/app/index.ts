@@ -1,21 +1,14 @@
-import {Component, OnInit} from '@angular/core'
-import {ROUTER_DIRECTIVES, Router} from '@angular/router'
+import {NgModule} from '@angular/core'
+import {BrowserModule} from '@angular/platform-browser'
+import {RouterModule} from '@angular/router'
 
-import {APP_PROVIDERS} from './app.providers.ts'
+import {AppComponent} from './app.component'
+import {routerConfig} from './app.routes'
 
-@Component({
-  selector: 'app',
-  template: require('./app.jade')(),
-  styles: [require('./app.scss')],
-  directives: ROUTER_DIRECTIVES,
-  providers: APP_PROVIDERS
+@NgModule({
+  imports: [BrowserModule, RouterModule, RouterModule.forRoot(routerConfig)],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
 })
-export class AppComponent implements OnInit {
-  constructor(private _router: Router) {}
-
-  public ngOnInit() {
-    // Hack to get to home by default
-    this._router.navigate([''])
-  }
+export class AppModule {
 }
-

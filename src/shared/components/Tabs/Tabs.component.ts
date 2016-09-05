@@ -7,26 +7,22 @@ import {
   QueryList
 } from '@angular/core'
 
-import {isEmpty} from 'ramda'
+import {isEmpty, prop} from 'ramda'
 
-import {get} from 'shared/helpers/util'
-
-import {Tab} from './tab'
-
-export * from './tab'
+import {Tab} from './Tab/Tab.component'
 
 @Component({
-  selector: 'tab-container',
-  template: require('./tabContainer.jade')(),
-  styles: [require('./tabContainer.scss')]
+  selector: 'tabs',
+  template: require('./Tabs.jade')(),
+  styles: [require('./Tabs.scss')]
 })
-export class TabContainer implements AfterContentInit {
+export class Tabs implements AfterContentInit {
   @Output() public onSelect = new EventEmitter()
   @ContentChildren(Tab) private tabs: QueryList<Tab>
 
   public ngAfterContentInit() {
     const activeTabs = this.tabs
-      .filter(get('active'))
+      .filter(prop('active'))
 
     if (activeTabs.length > 1)
       throw Error('To many tab active')

@@ -1,12 +1,7 @@
-import {provideRouter, RouterConfig} from '@angular/router'
+import {Routes} from '@angular/router'
 
-import {HomeComponent} from './home'
-
-const ROUTES: RouterConfig = [{
+export const routerConfig: Routes = [{
   path: '',
-  component: HomeComponent
+  loadChildren: () => System.import('./Home')
+    .then(({HomeModule}) => HomeModule)
 }]
-
-export const APP_ROUTER_PROVIDERS = [
-  provideRouter(ROUTES)
-]

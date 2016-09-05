@@ -1,20 +1,20 @@
-import {Component} from '@angular/core'
+import {NgModule} from '@angular/core'
+import {RouterModule} from '@angular/router'
 
-import {ModalService, Modal} from 'shared/components/modal'
-import {TabContainer, Tab} from 'shared/components/tabContainer'
+import {TabsModule} from 'shared/components/Tabs'
+import {ModalModule} from 'shared/components/Modal'
 
-@Component({
-  selector: 'home',
-  template: require('./home.jade')(),
-  providers: [ModalService],
-  directives: [Modal, TabContainer, Tab]
+import {HomeComponent} from './Home.component'
+
+const routeConfig = [{
+  path: 'home',
+  component: HomeComponent
+}]
+
+@NgModule({
+  imports: [ModalModule, TabsModule, RouterModule.forRoot(routeConfig)]
+  exports: [HomeComponent],
+  declarations: [HomeComponent]
 })
-export class HomeComponent {
-  public greeting: string
-
-  constructor(public modalService: ModalService) {
-    this.greeting = 'webpack-ng2-seed'
-  }
+export class HomeModule {
 }
-
-

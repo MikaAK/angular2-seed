@@ -1,3 +1,10 @@
-import {isEmpty} from 'ramda'
+import {isEmpty, cond, T, F} from 'ramda'
 
-export const some = (obj): boolean => !isEmpty(obj)
+import {isPOJO} from './isPOJO'
+import {isNotEmpty, isNotEmptyObject} from './isNotEmpty'
+
+export const some = cond([
+  [Array.isArray, isNotEmpty],
+  [isPOJO, isNotEmptyObject],
+  [T, F]
+])

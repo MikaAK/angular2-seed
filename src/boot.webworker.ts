@@ -1,3 +1,3 @@
-import {bootstrapWorkerUi} from '@angular/platform-browser-dynamic'
+// import {bootstrapWorkerUi} from '@angular/platform-browser-dynamic'
 
-bootstrapWorkerUi('app.js')
+// bootstrapWorkerUi('app.js')

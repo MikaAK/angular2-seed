@@ -1,51 +1,15 @@
-import {Component, Input, Output, EventEmitter, HostBinding, Injectable} from '@angular/core'
+import {NgModule} from '@angular/core'
+import {CommonModule} from '@angular/common'
 
-@Injectable()
-export class ModalService {
-  public isOpen: boolean = false
+import {Modal} from './Modal.component'
+import {ModalService} from './Modal.service'
 
-  public toggle(): void {
-    if (this.isOpen)
-      this.close()
-    else
-      this.open()
-  }
+export * from './Modal.service'
 
-  public close(): void {
-    this.isOpen = false
-  }
-
-  public open(): void {
-    this.isOpen = true
-  }
-}
-
-@Component({
-  selector: 'modal',
-  template: require('./modal.jade')(),
-  styles: [require('./modal.scss')]
+@NgModule({
+  imports: [CommonModule],
+  exports: [Modal, ModalService],
+  declarations: [Modal, ModalService]
 })
-export class Modal {
-  @Input() public title: string
-  @Output() public onClose = new EventEmitter()
-  @Output() public onOpen = new EventEmitter()
-  public _isOpenLast = false
-
-  constructor(public modalService: ModalService) {}
-
-  @HostBinding('hidden') public get _isHidden() {
-    return !this.modalService.isOpen
-  }
-
-  public ngDoCheck() {
-    if (this._isOpenLast !== this.modalService.isOpen) {
-      if (this.modalService.isOpen)
-        this.onOpen.emit(true)
-      else
-        this.onClose.emit(true)
-
-      this._isOpenLast = this.modalService.isOpen
-    }
-  }
+export class ModalModule {
 }
-

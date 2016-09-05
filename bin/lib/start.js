@@ -10,7 +10,7 @@ const WEBPACK_DEV_SERVER = path.resolve(context, 'node_modules/.bin/webpack-dev-
 export default function() {
   return spawnSync(WEBPACK_DEV_SERVER, [
     '--config', CONFIG_PATH,
-    '--colors', '--inline',
+    '--inline',
     '--hot',
     '--history-api-fallback'
   ], {stdio, cwd: context, env: process.env})
