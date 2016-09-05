@@ -13,7 +13,7 @@ import {Tab} from './Tab/Tab.component'
 
 @Component({
   selector: 'tabs',
-  template: require('./Tabs.jade')(),
+  template: require('./Tabs.pug')(),
   styles: [require('./Tabs.scss')]
 })
 export class Tabs implements AfterContentInit {

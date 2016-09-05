@@ -4,7 +4,7 @@ import {ModalService} from './Modal.service'
 
 @Component({
   selector: 'modal',
-  template: require('./Modal.jade')(),
+  template: require('./Modal.pug')(),
   styles: [require('./Modal.scss')]
 })
 export class Modal {

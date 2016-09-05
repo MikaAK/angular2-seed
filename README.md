@@ -10,7 +10,7 @@ If you do not wish to upload to S3 make sure to disable that part of the config 
 ##### Directives
 Comes with a few directives
 - Modal
-- Form-save
+- Tabs
 
 ##### Styles
 Uses ITCSS styles and has setup for that. Also a few helper classes and btn, forms and resets
@@ -31,5 +31,6 @@ This seed makes use of a cli tool. Run `webpack-ng2-seed` to see a list of optio
 To add a global file such as `angular2/core` that add it to `vendors.json`
 
 ## Things to Note
-When in sass files and need variables and includes use `@import 'myModule/path';
+When in sass files and need variables and includes use `@import 'myModule/path';`
+
 By default `rxjs/add/operators/map` is imported to include map for HTTP. Make sure to remove this if unwanted.

@@ -11,6 +11,7 @@ import S3Plugin from 'webpack-s3-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import {vendor} from './vendors.json'
 import {name} from './package.json'
+import WebpackDashboard from 'webpack-dashboard/plugin'
 
 const {
   CommonsChunkPlugin,
@@ -189,7 +190,8 @@ var config = {
   plugins: [
     new DefinePlugin(ENV),
     new ProgressPlugin(percentage => progressBar.update(percentage)),
-    new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG)
+    new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG),
+    new WebpackDashboard()
   ],
 
   tslint: {

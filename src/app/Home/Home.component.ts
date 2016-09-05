@@ -4,7 +4,7 @@ import {ModalService} from 'shared/components/Modal'
 
 @Component({
   selector: 'home',
-  template: require('./Home.jade')()
+  template: require('./Home.pug')()
 })
 export class HomeComponent {
   public greeting: string
