@@ -8,8 +8,9 @@ export * from './Modal.service'
 
 @NgModule({
   imports: [CommonModule],
-  exports: [Modal, ModalService],
-  declarations: [Modal, ModalService]
+  declarations: [Modal],
+  exports: [Modal],
+  providers: [ModalService]
 })
 export class ModalModule {
 }

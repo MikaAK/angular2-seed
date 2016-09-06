@@ -9,9 +9,10 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
+import WebpackDashboard from 'webpack-dashboard/plugin'
+
 import {vendor} from './vendors.json'
 import {name} from './package.json'
-import WebpackDashboard from 'webpack-dashboard/plugin'
 
 const {
   CommonsChunkPlugin,
@@ -47,8 +48,16 @@ const HTML_PLUGIN_CONFIG = {
   title: name,
   chunksSortMode: 'dependency',
   minify: IS_BUILD ? {caseSensitive: true} : false,
-  template: appPath('index.jade'),
+  template: appPath('index.pug'),
   favicon: path.resolve(__dirname, 'favicon.ico'),
+}
+
+// use when https://github.com/jantimon/favicons-webpack-plugin/issues/29 is fixed
+// FaviconsWebpackPlugin(FAVICON_CONFIG),
+const FAVICON_CONFIG = {
+  logo: 'favicon.png',
+  title: name,
+  inject: false
 }
 
 const ENTRY = {
@@ -189,7 +198,8 @@ var config = {
 
   plugins: [
     new DefinePlugin(ENV),
-    new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG)
+    new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG),
+    new ProgressPlugin(percentage => progressBar.update(percentage))
   ],
 
   tslint: {
@@ -235,14 +245,11 @@ if (!ENV.__TEST__)
     })
   )
 
-if (ENV.__TEST__ || IS_BUILD)
-  config.plugins.push(new ProgressPlugin(percentage => progressBar.update(percentage)))
-
 if (ENV.__DEV__) {
   var WebpackNotifierPlugin = require('webpack-notifier')
 
   config.plugins.push(
-    new WebpackDashboard({port: DEV_SERVER_PORT, title: name}),
+    // new WebpackDashboard({port: DEV_SERVER_PORT, title: name}),
     new WebpackNotifierPlugin({
       title: name,
       contentImage: rootPath('./favicon.ico')

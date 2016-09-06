@@ -1,19 +1,13 @@
 import {NgModule} from '@angular/core'
-import {RouterModule} from '@angular/router'
 
 import {TabsModule} from 'shared/components/Tabs'
 import {ModalModule} from 'shared/components/Modal'
 
 import {HomeComponent} from './Home.component'
-
-const routeConfig = [{
-  path: 'home',
-  component: HomeComponent
-}]
+import {HomeRoutes} from './Home.routes'
 
 @NgModule({
-  imports: [ModalModule, TabsModule, RouterModule.forRoot(routeConfig)]
-  exports: [HomeComponent],
+  imports: [HomeRoutes, ModalModule, TabsModule],
   declarations: [HomeComponent]
 })
 export default class HomeModule {

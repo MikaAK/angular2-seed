@@ -9,8 +9,7 @@ const WEBPACK_DEV_SERVER = path.resolve(context, 'node_modules/.bin/webpack-dev-
       stdio = 'inherit'
 
 export default function() {
-  return spawnSync(WEBPACK_DASHBOARD, [
-    '--', WEBPACK_DEV_SERVER,
+  return spawnSync(WEBPACK_DEV_SERVER, [
     '--config', CONFIG_PATH,
     '--inline',
     '--hot',

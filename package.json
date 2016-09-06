@@ -5,7 +5,9 @@
   "author": "MikaAK",
   "license": "MIT",
   "scripts": {
-    "test": "webpack-ng2-seed test"
+    "test": "webpack-ng2-seed test",
+    "start": "webpack-ng2-seed start",
+    "build": "webpack-ng2-seed build"
   },
   "bin": {
     "webpack-ng2-seed": "./bin/webpack-ng2-seed.js"
@@ -18,8 +20,31 @@
     "seed",
     "typescript"
   ],
+  "dependencies": {
+    "@angular/common": "^2.0.0-rc.6",
+    "@angular/compiler": "^2.0.0-rc.6",
+    "@angular/core": "^2.0.0-rc.6",
+    "@angular/forms": "^2.0.0-rc.6",
+    "@angular/http": "^2.0.0-rc.6",
+    "@angular/platform-browser": "^2.0.0-rc.6",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.6",
+    "@angular/router": "^3.0.0-rc.2",
+    "babel-polyfill": "^6.13.0",
+    "es5-shim": "^4.5.9",
+    "es6-shim": "^0.35.1",
+    "json3": "^3.3.2",
+    "ramda": "^0.22.1",
+    "reflect-metadata": "^0.1.8",
+    "resetcss": "^1.0.3",
+    "rxjs": "5.0.0-beta.11",
+    "webfontloader": "^1.6.26",
+    "zone.js": "^0.6.17"
+  },
   "devDependencies": {
+    "@types/protractor": "^1.5.18",
+    "@types/source-map": "^0.1.26",
     "@types/webfontloader": "^1.6.26",
+    "@types/webpack": "^1.12.33",
     "autoprefixer": "^6.4.1",
     "awesome-typescript-loader": "^2.2.1",
     "babel-cli": "^6.14.0",
@@ -36,6 +61,7 @@
     "css-loader": "^0.24.0",
     "dotenv": "^2.0.0",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "favicons-webpack-plugin": "0.0.7",
     "file-loader": "^0.9.0",
     "html-webpack-plugin": "^2.22.0",
     "image-webpack-loader": "^2.0.0",
@@ -58,6 +84,7 @@
     "raw-loader": "^0.5.1",
     "sass-loader": "^4.0.1",
     "sinon": "^1.17.5",
+    "ts-helpers": "^1.1.1",
     "sinon-chai": "^2.8.0",
     "string-replace-loader": "^1.0.3",
     "style-loader": "^0.13.1",
@@ -73,26 +100,5 @@
     "webpack-dev-server": "^2.1.0-beta.2",
     "webpack-notifier": "^1.4.1",
     "webpack-s3-plugin": "^0.9.0"
-  },
-  "dependencies": {
-    "@angular/common": "^2.0.0-rc.6",
-    "@angular/compiler": "^2.0.0-rc.6",
-    "@angular/core": "^2.0.0-rc.6",
-    "@angular/forms": "^2.0.0-rc.6",
-    "@angular/http": "^2.0.0-rc.6",
-    "@angular/platform-browser": "^2.0.0-rc.6",
-    "@angular/platform-browser-dynamic": "^2.0.0-rc.6",
-    "@angular/router": "^3.0.0-rc.2",
-    "babel-polyfill": "^6.13.0",
-    "es5-shim": "^4.5.9",
-    "es6-shim": "^0.35.1",
-    "json3": "^3.3.2",
-    "ramda": "^0.22.1",
-    "reflect-metadata": "^0.1.8",
-    "resetcss": "^1.0.3",
-    "rxjs": "5.0.0-beta.11",
-    "ts-helpers": "^1.1.1",
-    "webfontloader": "^1.6.26",
-    "zone.js": "^0.6.17"
   }
 }
