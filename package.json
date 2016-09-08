@@ -46,7 +46,6 @@
     "@types/node": "^6.0.38",
     "@types/protractor": "^1.5.18",
     "@types/source-map": "^0.1.26",
-    "@types/systemjs": "^0.19.30",
     "@types/webfontloader": "^1.6.26",
     "@types/webpack": "^1.12.33",
     "angular2-template-loader": "^0.5.0",
