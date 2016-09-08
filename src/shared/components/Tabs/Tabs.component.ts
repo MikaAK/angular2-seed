@@ -13,8 +13,8 @@ import {Tab} from './Tab/Tab.component'
 
 @Component({
   selector: 'tabs',
-  template: require('./Tabs.pug')(),
-  styles: [require('./Tabs.scss')]
+  templateUrl: './Tabs.pug',
+  styleUrls: ['./Tabs.scss']
 })
 export class Tabs implements AfterContentInit {
   @Output() public onSelect = new EventEmitter()

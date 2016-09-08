@@ -2,9 +2,6 @@
   "dependencies": {
     "ramda": "registry:npm/ramda#0.21.0+20160531162943"
   },
-  "globalDependencies": {
-    "require": "github:DefinitelyTyped/DefinitelyTyped/requirejs/require.d.ts#853544cb7068af64bdb10ef1ae0c54d3aa3a80f6"
-  },
   "globalDevDependencies": {
     "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#dd638012d63e069f2c99d06ef4dcc9616a943ee4"
   }

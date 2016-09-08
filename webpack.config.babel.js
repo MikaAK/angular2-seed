@@ -30,6 +30,7 @@ const {DefinePlugin, ProgressPlugin} = webpack,
       APP_ROOT = rootPath('src'),
       PUBLIC_PATH = rootPath('public'),
       NODE_MODULES_PATH = rootPath('node_modules'),
+      TYPINGS_PATH = rootPath('typings'),
       appPath = (nPath) => path.resolve(APP_ROOT, nPath),
       {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, AWS_BUCKET, CDN_URL} = process.env,
       BUILD_PATH = rootPath('build'),
@@ -62,17 +63,9 @@ const FAVICON_CONFIG = {
 
 const ENTRY = {
   vendor,
-  app: './src/boot.ts',
+  app: './src/main.ts',
   styles: './src/style/global.scss'
 }
-
-const TS_INGORES = [
-  2403,
-  2300,
-  2374,
-  2375,
-  1005
-]
 
 const ENV = {
   __DEV__: NODE_ENV === 'development',
@@ -89,7 +82,7 @@ const IS_BUILD = ENV.__STAGING__ || ENV.__PROD__,
 Object.assign(ENV, {__IS_BUILD__: IS_BUILD})
 
 if (ENV.__IS_WEBWORKER__) {
-  Object.assign(ENTRY, {webworker: './src/boot.webworker.ts'})
+  Object.assign(ENTRY, {webworker: './src/main.webworker.ts'})
   Object.assign(HTML_PLUGIN_CONFIG, {
     excludeChunks: ['app']
   })
@@ -118,7 +111,7 @@ var preLoaders = {
 var loaders = {
   javascript: {
     test: /\.ts$/,
-    loader: `babel!awesome-typescript?${TS_INGORES.map(num => `ignoreDiagnostics[]=${num}`).join('&')}`,
+    loader: ['babel', 'ts'],
     exclude: [NODE_MODULES_PATH],
     include: [APP_ROOT]
   },
@@ -184,7 +177,7 @@ var config = {
   resolve: {
     cache: ENV.__TEST__,
     extensions: ['', '.ts', '.js', '.json'],
-    modules: [NODE_MODULES_PATH, PUBLIC_PATH, APP_ROOT],
+    modules: [NODE_MODULES_PATH, PUBLIC_PATH, APP_ROOT, TYPINGS_PATH],
     alias: {
       vendor: rootPath('vendor')
     }

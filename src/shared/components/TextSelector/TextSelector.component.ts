@@ -21,8 +21,8 @@ const TEXT_SELECTOR_CONTROL_VALUE_ACCESSOR = new Provider(NG_VALUE_ACCESSOR, {
 
 @Component({
   selector: 'text-selector',
-  template: require('./TextSelector.pug')(),
-  styles: [require('./TextSelector.scss')],
+  templateUrl: './TextSelector.pug',
+  styleUrls: ['./TextSelector.scss'],
   providers: [TEXT_SELECTOR_CONTROL_VALUE_ACCESSOR]
 })
 export class TextSelector implements ControlValueAccessor {
@@ -84,8 +84,8 @@ export class TextSelector implements ControlValueAccessor {
 
 @Component({
   selector: 'text-selector-item',
-  template: require('./TextSelectorItem/TextSelectorItem.jade')(),
-  styles: [require('./TextSelectorItem/TextSelectorItem.scss')]
+  templateUrl: './TextSelectorItem/TextSelectorItem.jade
+  styleUrls: ['./TextSelectorItem/TextSelectorItem.scss']
 })
 export class TextSelectorItem {
   @Input() public value: any

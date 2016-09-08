@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core'
 
 @Component({
   selector: 'tab',
-  template: require('./Tab.pug')()
+  templateUrl: './Tab.pug'
 })
 export class Tab {
   @Input() public active: boolean

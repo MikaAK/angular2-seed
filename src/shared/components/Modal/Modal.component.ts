@@ -4,8 +4,8 @@ import {ModalService} from './Modal.service'
 
 @Component({
   selector: 'modal',
-  template: require('./Modal.pug')(),
-  styles: [require('./Modal.scss')]
+  templateUrl: './Modal.pug',
+  styleUrls: ['./Modal.scss']
 })
 export class Modal {
   @Input() public title: string

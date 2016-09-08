@@ -2,8 +2,8 @@ import {Component, Input, HostBinding} from '@angular/core'
 
 @Component({
   selector: 'text-selector-item',
-  template: require('./TextSelectorItem.pug')(),
-  styles: [require('./TextSelectorItem.scss')]
+  templateUrl: './TextSelectorItem.pug',
+  styleUrls: ['./TextSelectorItem.scss']
 })
 export class TextSelectorItem {
   @Input() public value: any
