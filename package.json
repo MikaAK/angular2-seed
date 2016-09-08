@@ -41,6 +41,8 @@
     "zone.js": "^0.6.17"
   },
   "devDependencies": {
+    "@angularclass/hmr": "^1.0.1",
+    "@angularclass/hmr-loader": "^1.0.1",
     "@types/node": "^6.0.38",
     "@types/protractor": "^1.5.18",
     "@types/source-map": "^0.1.26",

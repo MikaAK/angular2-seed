@@ -30,7 +30,6 @@ const {DefinePlugin, ProgressPlugin} = webpack,
       APP_ROOT = rootPath('src'),
       PUBLIC_PATH = rootPath('public'),
       NODE_MODULES_PATH = rootPath('node_modules'),
-      TYPINGS_PATH = rootPath('typings'),
       appPath = (nPath) => path.resolve(APP_ROOT, nPath),
       {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, AWS_BUCKET, CDN_URL} = process.env,
       BUILD_PATH = rootPath('build'),
@@ -111,7 +110,7 @@ var preLoaders = {
 var loaders = {
   javascript: {
     test: /\.ts$/,
-    loader: ['babel', 'ts', 'angular2-template'],
+    loader: ['babel', 'ts', 'angular2-template'].concat(IS_BUILD ? [] : '@angularclass/hmr-loader'),
     exclude: [NODE_MODULES_PATH],
     include: [APP_ROOT]
   },
@@ -177,7 +176,7 @@ var config = {
   resolve: {
     cache: ENV.__TEST__,
     extensions: ['', '.ts', '.js', '.json'],
-    modules: [NODE_MODULES_PATH, PUBLIC_PATH, APP_ROOT, TYPINGS_PATH],
+    modules: [NODE_MODULES_PATH, PUBLIC_PATH, APP_ROOT],
     alias: {
       vendor: rootPath('vendor')
     }
