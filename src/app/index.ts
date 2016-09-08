@@ -10,7 +10,7 @@ import {AppRouting} from './app.routes'
   declarations: [AppComponent],
   bootstrap: [AppComponent]
 })
-export class AppModule {
+export default class AppModule {
   constructor(public appRef: ApplicationRef) {}
 
   public hmrOnInit(store) {
