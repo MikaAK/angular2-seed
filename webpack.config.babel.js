@@ -49,7 +49,7 @@ const HTML_PLUGIN_CONFIG = {
   title: name,
   chunksSortMode: 'dependency',
   minify: IS_BUILD ? {caseSensitive: true} : false,
-  template: appPath('index.pug'),
+  template: `pug!${appPath('index.pug')}`,
   favicon: path.resolve(__dirname, 'favicon.ico'),
 }
 
@@ -104,22 +104,22 @@ var preLoaders = {
       replace: '$1.import($3).then(mod => mod.__esModule ? mod.default : mod)',
       flags: 'g'
     },
-    include: [rootPath('src/app'), rootPath('src/shared')]
+    include: [appPath('app'), appPath('shared')]
   }
 }
 
 var loaders = {
   javascript: {
     test: /\.ts$/,
-    loader: ['babel', 'ts'],
+    loader: ['babel', 'ts', 'angular2-template'],
     exclude: [NODE_MODULES_PATH],
     include: [APP_ROOT]
   },
 
   html: {
     test: /\.pug/,
-    loader: 'pug',
-    include: [APP_ROOT]
+    loader: ['apply', 'pug'],
+    include: [appPath('app'), appPath('shared')]
   },
 
   globalCss: {
