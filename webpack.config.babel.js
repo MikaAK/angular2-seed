@@ -131,14 +131,14 @@ var loaders = {
 
   globalCss: {
     test: /\.s?css$/,
-    loader: `style!css?sourceMap!${SASS_LOADER}`,
+    loader: ENV.__TEST__ ? 'null' : `style!css?sourceMap!${SASS_LOADER}`,
     include: [appPath('style')]
   },
 
   // For to-string removes the ability to cache css so we use raw in development
   componentCss: {
     test: /\.s?css$/,
-    loader: `${IS_BUILD ? 'to-string' : 'raw'}!${SASS_LOADER}`,
+    loader: ENV.__TEST__ ? 'null' : `${IS_BUILD ? 'to-string' : 'raw'}!${SASS_LOADER}`,
     exclude: [appPath('style')]
   },
 
@@ -148,8 +148,8 @@ var loaders = {
   },
 
   file: {
-    test: /\.(png|gif|jpg|jpeg)$/,
-    loader: `file${IS_BUILD ? '?name=[hash].[ext]' : ''}!image-webpack?bypassOnDebug`,
+    test: /\.(png|gif|jpg|jpeg|woff|woff2|eof|ttf)$/,
+    loader: `file${IS_BUILD ? '?name=[name]-[hash].[ext]' : ''}!image-webpack?bypassOnDebug`,
     include: [rootPath('public/img')]
   },
 
