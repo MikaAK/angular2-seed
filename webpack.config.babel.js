@@ -130,7 +130,7 @@ var loaders = {
   // For to-string removes the ability to cache css so we use raw in development
   componentCss: {
     test: /\.s?css$/,
-    loader: ENV.__TEST__ ? 'null' : `${IS_BUILD ? 'to-string' : 'raw'}!${SASS_LOADER}`,
+    loader: ENV.__TEST__ ? 'null' : `raw!${SASS_LOADER}`,
     exclude: [appPath('style')]
   },
 
@@ -248,17 +248,15 @@ if (ENV.__DEV__) {
     })
   )
 } else if (IS_BUILD) {
-  loaders.globalCss.loader = ExtractTextPlugin.extract({
-    fallbackLoader: 'style',
-    loader: loaders.globalCss.loader.replace('style', '')
-  })
+  loaders.globalCss.loader = ExtractTextPlugin.extract(loaders.globalCss.loader.replace('style!', ''))
 
   config.plugins.push(
-    new DedupePlugin(),
+    // https://github.com/webpack/webpack/issues/2644
+    // new DedupePlugin(),
     new ExtractTextPlugin('[name]-[chunkhash].css'),
     new LimitChunkCountPlugin({maxChunks: 15}),
     new MinChunkSizePlugin({minChunkSize: 10000}),
-    new UglifyJsPlugin({mangle: false})
+    new UglifyJsPlugin()
     // If you need more entry chunks add entrypoint names to `chunks`
     // new CommonsChunkPlugin({
     //   name: 'common',

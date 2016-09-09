@@ -17,7 +17,10 @@ html
      h1 Loading Application
 
     for file in htmlWebpackPlugin.files.js
-      - if (/(common|styles)/.test(file))
+      - if (/styles/.test(file))
+        - if (!htmlWebpackPlugin.files.css.length)
+          script(src=file async)
+      - else if (/common/.test(file))
         script(src=file async)
       - else
         script(src=file)
