@@ -9,5 +9,5 @@ export default function() {
   const {NODE_ENV} = process.env
   const IS_BUILD = NODE_ENV === 'production' || NODE_ENV === 'staging'
 
-  return spawnSync(WEBPACK, IS_BUILD ? ['--optimize-minimize'] : [], {stdio})
+  return spawnSync(WEBPACK, [], {stdio})
 }

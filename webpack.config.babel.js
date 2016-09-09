@@ -257,14 +257,11 @@ if (ENV.__DEV__) {
     new LimitChunkCountPlugin({maxChunks: 15}),
     new MinChunkSizePlugin({minChunkSize: 10000}),
     new UglifyJsPlugin()
-    // If you need more entry chunks add entrypoint names to `chunks`
-    // new CommonsChunkPlugin({
-    //   name: 'common',
-    //   filename: IS_BUILD ? 'common-[chunkhash].js' : 'common.js',
-    //   async: true,
-    //   minChunks: 2,
-    //   chunks: ['app']
-    // })
+    new CommonsChunkPlugin({
+      name: 'common',
+      async: true,
+      minChunks: 2
+    })
   )
 } else if (ENV.__TEST__) {
   config.stats = {

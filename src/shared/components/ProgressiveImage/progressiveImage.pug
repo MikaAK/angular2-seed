@@ -1,0 +1,4 @@
+img.progressive-img_small('[src]'='lowResSrc' '*ngIf'='showLowRes')
+img.progressive-img_normal('[src]'='highResSrc' '(load)'='highResLoaded()' '[style.opacity]'='showHighRes ? 1 : 0')
+
+.padding-bottom--10('*ngIf'='showLowRes')
