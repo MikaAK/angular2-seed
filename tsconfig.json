@@ -27,7 +27,7 @@
     ]
   },
   "include": [
-    "./src/customTypings.d.ts",
+    "./src/custom-typings.d.ts",
     "./typings/index.d.ts",
     "./src/main.ts"
   ]

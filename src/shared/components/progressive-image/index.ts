@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core'
 import {CommonModule} from '@angular/common'
 
-import ImageLoadModule from 'shared/directives/ImageLoad'
+import ImageLoadModule from 'shared/directives/image-load'
 
-import {ProgressiveImage} from './ProgressiveImage.component'
+import {ProgressiveImage} from './progressive-image.component'
 
 @NgModule({
   imports: [ImageLoadModule, CommonModule],

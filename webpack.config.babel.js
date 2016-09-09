@@ -256,7 +256,7 @@ if (ENV.__DEV__) {
     new ExtractTextPlugin('[name]-[chunkhash].css'),
     new LimitChunkCountPlugin({maxChunks: 15}),
     new MinChunkSizePlugin({minChunkSize: 10000}),
-    new UglifyJsPlugin()
+    new UglifyJsPlugin(),
     new CommonsChunkPlugin({
       name: 'common',
       async: true,
@@ -303,7 +303,10 @@ if (ENV.__PROD__)
       s3UploadOptions: {
         Bucket: AWS_BUCKET,
         CacheControl: 'max-age=315360000, no-transform, public',
-        ContentEncoding: 'gzip'
+        ContentEncoding(file) {
+          if (/css|js/.test(file))
+            return 'gzip'
+        }
       },
       cdnizerOptions: {
         defaultCDNBase: DEFAULT_CDN

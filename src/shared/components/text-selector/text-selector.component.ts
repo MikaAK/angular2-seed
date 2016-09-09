@@ -21,8 +21,8 @@ const TEXT_SELECTOR_CONTROL_VALUE_ACCESSOR = new Provider(NG_VALUE_ACCESSOR, {
 
 @Component({
   selector: 'text-selector',
-  templateUrl: './TextSelector.pug',
-  styleUrls: ['./TextSelector.scss'],
+  templateUrl: './text-selector.pug',
+  styleUrls: ['./text-selector.scss'],
   providers: [TEXT_SELECTOR_CONTROL_VALUE_ACCESSOR]
 })
 export class TextSelector implements ControlValueAccessor {

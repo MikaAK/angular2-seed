@@ -1,11 +1,11 @@
 import {Component, Input, Output, EventEmitter, HostBinding} from '@angular/core'
 
-import {ModalService} from './Modal.service'
+import {ModalService} from './modal.service'
 
 @Component({
   selector: 'modal',
-  templateUrl: './Modal.pug',
-  styleUrls: ['./Modal.scss']
+  templateUrl: './modal.pug',
+  styleUrls: ['./modal.scss']
 })
 export class Modal {
   @Input() public title: string

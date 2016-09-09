@@ -2,8 +2,8 @@ import {Component, Input} from '@angular/core'
 
 @Component({
   selector: 'progressive-image',
-  templateUrl: './ProgressiveImage.pug',
-  styleUrls: ['./ProgressiveImage.scss']
+  templateUrl: './progressive-image.pug',
+  styleUrls: ['./progressive-image.scss']
 })
 export class ProgressiveImage {
   @Input() public highResSrc: string

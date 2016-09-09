@@ -9,12 +9,12 @@ import {
 
 import {isEmpty, prop} from 'ramda'
 
-import {Tab} from './Tab/Tab.component'
+import {Tab} from './tab/tab.component'
 
 @Component({
   selector: 'tabs',
-  templateUrl: './Tabs.pug',
-  styleUrls: ['./Tabs.scss']
+  templateUrl: './tabs.pug',
+  styleUrls: ['./tabs.scss']
 })
 export class Tabs implements AfterContentInit {
   @Output() public onSelect = new EventEmitter()

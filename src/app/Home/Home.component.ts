@@ -4,7 +4,7 @@ import {ModalService} from 'shared/components/Modal'
 
 @Component({
   selector: 'home',
-  templateUrl: './Home.pug'
+  templateUrl: './home.pug'
 })
 export class HomeComponent {
   public greeting: string
