@@ -34,3 +34,5 @@ To add a global file such as `angular2/core` that add it to `vendors.json`
 When in sass files and need variables and includes use `@import 'myModule/path';`
 
 By default `rxjs/add/operators/map` is imported to include map for HTTP. Make sure to remove this if unwanted.
+
+You must have a trailing slash for CDN_URL
