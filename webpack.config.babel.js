@@ -308,23 +308,23 @@ if (ENV.__PROD__)
       cdnizerOptions: {
         defaultCDNBase: DEFAULT_CDN
       }
-    }),
-
-    new S3Plugin({
-      directory: BUILD_PATH,
-      basePath: 'public/',
-      exclude: /\.svg$/,
-      include: loaders.file.test,
-      s3Options: {
-        accessKeyId: AWS_ACCESS_KEY,
-        secretAccessKey: AWS_SECRET_KEY,
-        region: AWS_REGION
-      },
-      s3UploadOptions: {
-        Bucket: AWS_BUCKET,
-        CacheControl: 'max-age=315360000, no-transform, public'
-      }
     })
+
+    // new S3Plugin({
+    //   directory: BUILD_PATH,
+    //   basePath: 'public/',
+    //   exclude: /\.svg$/,
+    //   include: loaders.file.test,
+    //   s3Options: {
+    //     accessKeyId: AWS_ACCESS_KEY,
+    //     secretAccessKey: AWS_SECRET_KEY,
+    //     region: AWS_REGION
+    //   },
+    //   s3UploadOptions: {
+    //     Bucket: AWS_BUCKET,
+    //     CacheControl: 'max-age=315360000, no-transform, public'
+    //   }
+    // })
   )
 else
   vendor.push('zone.js/dist/long-stack-trace-zone')
