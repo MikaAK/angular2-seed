@@ -1,7 +1,7 @@
 import {isEmpty, cond, T, F} from 'ramda'
 
-import {isPOJO} from './isPOJO'
-import {isNotEmpty, isNotEmptyObject} from './isNotEmpty'
+import {isPOJO} from './is-pojo'
+import {isNotEmpty, isNotEmptyObject} from './is-not-empty'
 
 export const some = cond([
   [Array.isArray, isNotEmpty],

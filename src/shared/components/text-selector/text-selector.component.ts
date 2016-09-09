@@ -31,11 +31,6 @@ export class TextSelector implements ControlValueAccessor {
   private _onChange: any
   private _onTouch: any
 
-  public ngAfterContentInit() {
-    this.selectItems.changes
-      .subscribe(() => console.log('hit with a'))
-  }
-
   public registerOnChange(onChangeFn: any) {
     this._onChange = onChangeFn
   }
@@ -84,8 +79,8 @@ export class TextSelector implements ControlValueAccessor {
 
 @Component({
   selector: 'text-selector-item',
-  templateUrl: './TextSelectorItem/TextSelectorItem.jade
-  styleUrls: ['./TextSelectorItem/TextSelectorItem.scss']
+  templateUrl: './text-selector-item/text-selector-item.jade
+  styleUrls: ['./text-selector-item/text-selector-item.scss']
 })
 export class TextSelectorItem {
   @Input() public value: any
