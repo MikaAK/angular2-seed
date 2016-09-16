@@ -21,13 +21,13 @@
     "typescript"
   ],
   "dependencies": {
-    "@angular/common": "^2.0.0-rc.6",
-    "@angular/compiler": "^2.0.0-rc.6",
-    "@angular/core": "^2.0.0-rc.6",
-    "@angular/forms": "^2.0.0-rc.6",
-    "@angular/http": "^2.0.0-rc.6",
-    "@angular/platform-browser": "^2.0.0-rc.6",
-    "@angular/platform-browser-dynamic": "^2.0.0-rc.6",
+    "@angular/common": "^2.0.0",
+    "@angular/compiler": "^2.0.0",
+    "@angular/core": "^2.0.0",
+    "@angular/forms": "^2.0.0",
+    "@angular/http": "^2.0.0",
+    "@angular/platform-browser": "^2.0.0",
+    "@angular/platform-browser-dynamic": "^2.0.0",
     "@angular/router": "^3.0.0-rc.2",
     "babel-polyfill": "^6.13.0",
     "es5-shim": "^4.5.9",
@@ -36,9 +36,9 @@
     "ramda": "^0.22.1",
     "reflect-metadata": "^0.1.8",
     "resetcss": "^1.0.3",
-    "rxjs": "5.0.0-beta.11",
+    "rxjs": "5.0.0-beta.12",
     "webfontloader": "^1.6.26",
-    "zone.js": "^0.6.17"
+    "zone.js": "^0.6.21"
   },
   "devDependencies": {
     "@angularclass/hmr": "^1.0.1",

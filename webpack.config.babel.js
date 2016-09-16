@@ -14,6 +14,8 @@ import WebpackDashboard from 'webpack-dashboard/plugin'
 import {vendor} from './vendors.json'
 import {name} from './package.json'
 
+const {ContextReplacementPlugin} = webpack
+
 const {
   CommonsChunkPlugin,
   DedupePlugin,
@@ -191,7 +193,12 @@ var config = {
   plugins: [
     new DefinePlugin(ENV),
     new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG),
-    new ProgressPlugin(percentage => progressBar.update(percentage))
+    new ProgressPlugin(percentage => progressBar.update(percentage)),
+    new ContextReplacementPlugin(
+      // The (\\|\/) piece accounts for path separators in *nix and Windows
+      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+      rootPath('./src')
+    )
   ],
 
   tslint: {
