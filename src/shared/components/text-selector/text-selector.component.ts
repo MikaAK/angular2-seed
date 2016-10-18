@@ -79,7 +79,7 @@ export class TextSelector implements ControlValueAccessor {
 
 @Component({
   selector: 'text-selector-item',
-  templateUrl: './text-selector-item/text-selector-item.pug
+  templateUrl: './text-selector-item/text-selector-item.pug,
   styleUrls: ['./text-selector-item/text-selector-item.scss']
 })
 export class TextSelectorItem {
