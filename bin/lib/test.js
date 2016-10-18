@@ -1,6 +1,6 @@
 import path from 'path'
 import {spawnSync} from 'child_process'
-import CONTEXT from './get_root_path'
+import CONTEXT from './get-root-path'
 
 const KARMA = path.resolve(CONTEXT, 'node_modules/.bin/karma')
 

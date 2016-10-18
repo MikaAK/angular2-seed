@@ -2,19 +2,23 @@
 
 import _ from 'lodash'
 import path from 'path'
-import webpack from 'webpack'
-import autoprefixer from 'autoprefixer'
 import ProgressBar from 'progress'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
+import V8LazyParsePlugin from 'v8-lazy-parse-webpack-plugin'
 import WebpackDashboard from 'webpack-dashboard/plugin'
+import {
+  optimize,
+  ContextReplacementPlugin,
+  DefinePlugin,
+  ProgressPlugin,
+  LoaderOptionsPlugin
+} from 'webpack'
 
 import {vendor} from './vendors.json'
 import {name} from './package.json'
-
-const {ContextReplacementPlugin} = webpack
 
 const {
   CommonsChunkPlugin,
@@ -23,10 +27,9 @@ const {
   LimitChunkCountPlugin,
   MinChunkSizePlugin,
   UglifyJsPlugin
-} = webpack.optimize
+} = optimize
 
-const {DefinePlugin, ProgressPlugin} = webpack,
-      CONTEXT = path.resolve(__dirname),
+const CONTEXT = path.resolve(__dirname),
       rootPath = (nPath) => path.resolve(CONTEXT, nPath),
       DEV_SERVER_PORT = 4000,
       APP_ROOT = rootPath('src'),
@@ -112,7 +115,12 @@ var preLoaders = {
 var loaders = {
   javascript: {
     test: /\.ts$/,
-    loader: ['babel', 'ts', 'angular2-template'].concat(IS_BUILD ? [] : '@angularclass/hmr-loader'),
+    loader: [
+      'babel',
+      'awesome-typescript',
+      'angular2-template',
+      `@angularclass/hmr-loader?pretty=${!IS_BUILD}&prod=${IS_BUILD}`
+    ],
     exclude: [NODE_MODULES_PATH],
     include: [APP_ROOT]
   },
@@ -162,9 +170,9 @@ else if (ENV.__STAGING__ || ENV.__TEST__)
   devtool = '#inline-source-map'
 
 var config = {
+  cache: true,
   context: CONTEXT,
   devtool,
-  debug: !ENV.__PROD__ && !ENV.__STAGING__,
   entry: ENTRY,
 
   output: {
@@ -176,8 +184,7 @@ var config = {
   },
 
   resolve: {
-    cache: ENV.__TEST__,
-    extensions: ['', '.ts', '.js', '.json'],
+    extensions: ['.ts', '.js', '.json'],
     modules: [NODE_MODULES_PATH, PUBLIC_PATH, APP_ROOT],
     alias: {
       vendor: rootPath('vendor')
@@ -186,29 +193,23 @@ var config = {
 
   module: {
     noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/],
-    preLoaders: Object.values(preLoaders),
-    loaders: Object.values(loaders)
+    loaders: Object.values(preLoaders)
+      .map(loader => Object.assign(loader, {enforce: 'pre'}))
+      .concat(Object.values(loaders))
   },
 
   plugins: [
     new DefinePlugin(ENV),
     new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG),
-    new ProgressPlugin(percentage => progressBar.update(percentage)),
+    new LoaderOptionsPlugin({
+      debug: !ENV.__PROD__ && !ENV.__STAGING__
+    }),
     new ContextReplacementPlugin(
       // The (\\|\/) piece accounts for path separators in *nix and Windows
       /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
       rootPath('./src')
     )
   ],
-
-  tslint: {
-    emitErrors: false,
-    failOnHint: false
-  },
-
-  postcss() {
-    return [autoprefixer]
-  },
 
   devServer: {
     stats: 'minimal',
@@ -244,11 +245,14 @@ if (!ENV.__TEST__)
     })
   )
 
+if (!ENV.__DEV__)
+  config.plugins.push(new ProgressPlugin(percentage => progressBar.update(percentage)),)
+
 if (ENV.__DEV__) {
   var WebpackNotifierPlugin = require('webpack-notifier')
 
   config.plugins.push(
-    // new WebpackDashboard({port: DEV_SERVER_PORT, title: name}),
+    new WebpackDashboard({title: name}),
     new WebpackNotifierPlugin({
       title: name,
       contentImage: rootPath('./favicon.ico')
@@ -260,10 +264,15 @@ if (ENV.__DEV__) {
   config.plugins.push(
     // https://github.com/webpack/webpack/issues/2644
     // new DedupePlugin(),
+    new V8LazyParsePlugin(),
     new ExtractTextPlugin('[name]-[chunkhash].css'),
     new LimitChunkCountPlugin({maxChunks: 15}),
     new MinChunkSizePlugin({minChunkSize: 10000}),
-    new UglifyJsPlugin(),
+    new UglifyJsPlugin({
+      compress: {
+        negate_iife: false // eslint-disable-line camelcase
+      }
+    }),
     new CommonsChunkPlugin({
       name: 'common',
       async: true,

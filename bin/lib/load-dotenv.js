@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import dotenv from 'dotenv'
-import CONTEXT from './get_root_path'
+import CONTEXT from './get-root-path'
 
 export default function() {
   const ENV_FILE = path.resolve(CONTEXT, '.env')
