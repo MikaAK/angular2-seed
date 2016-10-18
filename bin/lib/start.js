@@ -7,7 +7,6 @@ const WEBPACK_DEV_SERVER = path.resolve(context, 'node_modules/.bin/webpack-dev-
 
 export default function() {
   return runWebpack(WEBPACK_DEV_SERVER, [
-    '--config', CONFIG_PATH,
     '--inline',
     '--hot',
     '--history-api-fallback'

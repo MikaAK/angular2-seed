@@ -9,6 +9,7 @@ import S3Plugin from 'webpack-s3-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import V8LazyParsePlugin from 'v8-lazy-parse-webpack-plugin'
 import WebpackDashboard from 'webpack-dashboard/plugin'
+import {ForkCheckerPlugin} from 'awesome-typescript-loader'
 import {
   optimize,
   ContextReplacementPlugin,
@@ -101,11 +102,11 @@ var preLoaders = {
   },
 
   systemJS: {
-    test: /\.ts$/,
+    test: /\.routes\.ts$/,
     loader: 'string-replace',
     query: {
       search: '(System|SystemJS)(.*[\\n\\r]\\s*\\.|\\.)import\\((.+)\\)',
-      replace: '$1.import($3).then(mod => mod.__esModule ? mod.default : mod)',
+      replace: '$1.import($3).then(mod => mod.default)',
       flags: 'g'
     },
     include: [appPath('app'), appPath('shared')]
@@ -116,7 +117,6 @@ var loaders = {
   javascript: {
     test: /\.ts$/,
     loader: [
-      'babel',
       'awesome-typescript',
       'angular2-template',
       `@angularclass/hmr-loader?pretty=${!IS_BUILD}&prod=${IS_BUILD}`
@@ -199,6 +199,7 @@ var config = {
   },
 
   plugins: [
+    new ForkCheckerPlugin(),
     new DefinePlugin(ENV),
     new HtmlWebpackPlugin(HTML_PLUGIN_CONFIG),
     new LoaderOptionsPlugin({

@@ -10,7 +10,7 @@ const {NODE_ENV} = process.env,
 export default function(command, params = []) {
   const config = {stdio, cwd, env: process.env}
 
-  if (NODE_ENV === 'development')
+  if (!NODE_ENV || NODE_ENV === 'development')
     return spawnSync(WEBPACK_DASHBOARD, [
       command,
       ...params
