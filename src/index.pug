@@ -10,7 +10,7 @@ html
     link(rel='icon' href=htmlWebpackPlugin.options.favicon)
 
     for file in htmlWebpackPlugin.files.css
-      link(rel='stylesheet' href=file)
+      link(rel='stylesheet' href=file async)
 
   body
     app
@@ -19,8 +19,8 @@ html
     for file in htmlWebpackPlugin.files.js
       - if (/styles/.test(file))
         - if (!htmlWebpackPlugin.files.css.length)
-          script(src=file async)
+          script(src=file defer)
       - else if (/common/.test(file))
-        script(src=file async)
+        script(src=file defer)
       - else
-        script(src=file)
+        script(src=file defer)

@@ -10,6 +10,7 @@ import CompressionPlugin from 'compression-webpack-plugin'
 import V8LazyParsePlugin from 'v8-lazy-parse-webpack-plugin'
 import WebpackDashboard from 'webpack-dashboard/plugin'
 import {ForkCheckerPlugin} from 'awesome-typescript-loader'
+import {AotPlugin} from '@ngtools/webpack'
 import {
   optimize,
   ContextReplacementPlugin,
@@ -37,8 +38,9 @@ const CONTEXT = path.resolve(__dirname),
       PUBLIC_PATH = rootPath('public'),
       NODE_MODULES_PATH = rootPath('node_modules'),
       appPath = (nPath) => path.resolve(APP_ROOT, nPath),
-      {NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, AWS_BUCKET, CDN_URL} = process.env,
+      {IS_AOT, NODE_ENV, AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, AWS_BUCKET, CDN_URL} = process.env,
       BUILD_PATH = rootPath('build'),
+      buildPath = (nPath) => path.resolve(BUILD_PATH, nPath),
       IS_WEBWORKER = false
 
 const progressBar = new ProgressBar('[:bar] :percent (:current/:total)', {
@@ -73,6 +75,7 @@ const ENTRY = {
 }
 
 const ENV = {
+  __AOT__: IS_AOT,
   __DEV__: NODE_ENV === 'development',
   __PROD__: NODE_ENV === 'production',
   __TEST__: NODE_ENV === 'test',
@@ -117,6 +120,7 @@ var loaders = {
   javascript: {
     test: /\.ts$/,
     loader: [
+      'babel',
       'awesome-typescript',
       'angular2-template',
       `@angularclass/hmr-loader?pretty=${!IS_BUILD}&prod=${IS_BUILD}`
@@ -177,7 +181,7 @@ var config = {
 
   output: {
     path: BUILD_PATH,
-    publicPath: IS_BUILD ? DEFAULT_CDN : '',
+    publicPath: ENV.__PROD__ ? DEFAULT_CDN : '',
     filename: IS_BUILD ? '[name]-[chunkhash].js' : '[name].js',
     sourceMapFilename: '[name].map',
     chunkFilename: IS_BUILD ? '[id].chunk-[chunkhash].js': '[id].chunk.js'
@@ -193,7 +197,7 @@ var config = {
 
   module: {
     noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/],
-    loaders: Object.values(preLoaders)
+    rules: Object.values(preLoaders)
       .map(loader => Object.assign(loader, {enforce: 'pre'}))
       .concat(Object.values(loaders))
   },
@@ -248,6 +252,19 @@ if (!ENV.__TEST__)
 
 if (!ENV.__DEV__)
   config.plugins.push(new ProgressPlugin(percentage => progressBar.update(percentage)),)
+
+if (ENV.__AOT__) {
+  loaders.javascript.loader = '@ngtools/webpack'
+
+  config.plugins.push(
+    new AotPlugin({
+      tsConfigPath: rootPath('tsconfig.json'),
+      basePath: APP_ROOT,
+      entryModule: 'app/app.module#AppModule',
+      genDir: buildPath('ngfactory')
+    })
+  )
+}
 
 if (ENV.__DEV__) {
   var WebpackNotifierPlugin = require('webpack-notifier')

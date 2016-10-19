@@ -9,5 +9,9 @@ export default {
 
   staging() {
     process.env.NODE_ENV = 'staging'
+  },
+
+  aot() {
+    process.env.IS_AOT = true
   }
 }

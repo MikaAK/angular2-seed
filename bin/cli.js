@@ -14,7 +14,8 @@ var CLI = {
       p: 'production',
       d: 'development',
       s: 'staging',
-      'single-run': 'run once (test only)'
+      aot: 'aheadOfTime',
+      '-1': 'singleRun'
     }
   }),
 
@@ -31,8 +32,10 @@ var CLI = {
 
     /* eslint-disable */
     console.log(`${chalk.green('ENV')}: ${chalk.magenta(process.env.NODE_ENV)}`)
-    /* eslint-enable */
 
+    if (program.flags.aot)
+      console.log(`${chalk.green('AOT Mode')}: Active`)
+    /* eslint-enable */
 
     if (!command)
       program.showHelp()
