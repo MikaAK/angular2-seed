@@ -1,7 +1,7 @@
 import {Routes, RouterModule} from '@angular/router'
-import {HomeComponent} from './Home.component'
+import {HomeComponent} from './home.component'
 
-const routerConfig: Routes = [{
+export const routerConfig: Routes = [{
   path: '',
   component: HomeComponent
 }]

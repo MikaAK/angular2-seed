@@ -5,8 +5,8 @@ import {Component, Input} from '@angular/core'
   templateUrl: './tab.pug'
 })
 export class Tab {
-  @Input() public active: boolean
-  @Input() public disabled: boolean
-  @Input() public title: string
+  @Input() active: boolean
+  @Input() disabled: boolean
+  @Input() title: string
 }
 

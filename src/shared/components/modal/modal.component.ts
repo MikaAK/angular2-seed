@@ -8,9 +8,9 @@ import {ModalService} from './modal.service'
   styleUrls: ['./modal.scss']
 })
 export class Modal {
-  @Input() public title: string
-  @Output() public onClose = new EventEmitter()
-  @Output() public onOpen = new EventEmitter()
+  @Input() title: string
+  @Output() onClose = new EventEmitter()
+  @Output() onOpen = new EventEmitter()
   public _isOpenLast = false
 
   constructor(public modalService: ModalService) {}

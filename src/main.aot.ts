@@ -4,10 +4,10 @@ import {bootloader} from '@angularclass/hmr'
 import {enableProdMode} from '@angular/core'
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic'
 
-import {AppModule} from 'app/app.module'
+import {AppModuleNgFactory} from './app/app.module.ngfactory'
 
 const main = () => platformBrowserDynamic()
-  .bootstrapModule(AppModule)
+  .bootstrapModuleFactory(AppModuleNgFactory)
 
 if (__IS_BUILD__) {
   enableProdMode()

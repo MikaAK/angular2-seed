@@ -1,8 +1,8 @@
 import {Routes, RouterModule} from '@angular/router'
 
-const routerConfig: Routes = [{
+export const routerConfig: Routes = [{
   path: '',
-  loadChildren: () => System.import('./home')
+  loadChildren: './home/home.module#HomeModule'
 }]
 
 export const AppRouting = RouterModule.forRoot(routerConfig)

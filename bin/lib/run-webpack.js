@@ -8,9 +8,10 @@ const WEBPACK_DASHBOARD = path.resolve(cwd, 'node_modules/.bin/webpack-dashboard
 
 export default function(command, params = []) {
   const config = {stdio, cwd, env: process.env},
-        {NODE_ENV} = process.env
+        {NODE_ENV, IS_BUILD_COMMAND} = process.env
 
-  if (!NODE_ENV || NODE_ENV === 'development')
+
+  if (!IS_BUILD_COMMAND && (!NODE_ENV || NODE_ENV === 'development'))
     return spawnSync(WEBPACK_DASHBOARD, [
       command,
       ...params

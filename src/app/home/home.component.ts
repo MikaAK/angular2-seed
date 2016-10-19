@@ -1,6 +1,6 @@
 import {Component} from '@angular/core'
 
-import {ModalService} from 'shared/components/Modal'
+import {ModalService} from 'shared/components/modal'
 
 @Component({
   selector: 'home',

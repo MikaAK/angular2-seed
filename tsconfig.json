@@ -2,11 +2,11 @@
   "compileOnSave": false,
   "buildOnSave": false,
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES5",
     "strictNullChecks": false,
-    "module": "es6",
+    "module": "es2015",
     "baseUrl": "./src",
-    "rootDir": ".",
+    "mapRoot": "",
     "moduleResolution": "node",
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -17,18 +17,17 @@
     "inlineSources": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
-    "types": [
-      "protractor",
-      "source-map",
-      "webpack",
-      "webfontloader",
-      "node"
-    ]
+    "skipLibCheck": true
   },
   "include": [
     "./src/custom-typings.d.ts",
-    "./typings/index.d.ts",
-    "./src/main.ts"
-  ]
+    "./src/main.ts",
+    "./src/**/*.ts"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true
+  },
+  "angularCompilerOptions": {
+    "entryModule": "src/app/app.module#AppModule"
+  }
 }

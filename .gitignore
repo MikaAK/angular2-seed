@@ -85,3 +85,4 @@ typings/browser
 typings/browser/
 typings/browser.d.ts
 typings/
+.awcache/

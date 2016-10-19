@@ -6,5 +6,5 @@ import {ImageLoad} from './image-load.directive'
   exports: [ImageLoad],
   declarations: [ImageLoad]
 })
-export default class ImageLoadModule {
+export class ImageLoadModule {
 }
